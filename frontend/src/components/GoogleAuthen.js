@@ -9,7 +9,7 @@ function GoogleAuthen() {
   return (
     <div>
       <GoogleLogin
-        clientId="229990142796-eve4su8svntatkl23b206v10m293hsiv.apps.googleusercontent.com"
+        clientId="910826813887-n6ef67ejo1udav8a177v8vbnhi6c6rbp.apps.googleusercontent.com"
         buttonText="Login"
         onSuccess={responseGoogle}
         onFailure={responseGoogle}

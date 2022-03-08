@@ -10,7 +10,7 @@ function FacebookAuthen() {
       let result = await axios.post('http://localhost:8080/api/login', {
         token: response.accessToken,
       });
-      //console.log(jwt_decode(result.data.access_token).exp);
+      
       sessionStorage.setItem('access_token', result.data.access_token);
     }
   };
