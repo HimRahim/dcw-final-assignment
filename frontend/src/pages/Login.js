@@ -1,17 +1,13 @@
 import React from 'react';
-import FacebookAuthen from '../components/FacebookAuthen'
+import FacebookAuthen from '../components/FacebookAuthen';
 
-import GoogleAuthen from '../components/GoogleAuthen'
+import GoogleAuthen from '../components/GoogleAuthen';
 
-function Login() {
-  
-
-  
-
+function Login({ setToken }) {
   return (
     <div className="flex justify-center h-screen items-center">
-      <FacebookAuthen/>
-      <GoogleAuthen/>
+      <FacebookAuthen setToken={setToken} />
+      <GoogleAuthen />
     </div>
   );
 }

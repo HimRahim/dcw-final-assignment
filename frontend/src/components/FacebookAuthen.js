@@ -2,7 +2,7 @@ import React from 'react';
 import FacebookLogin from 'react-facebook-login';
 import axios from 'axios';
 
-function FacebookAuthen() {
+function FacebookAuthen({ setToken }) {
   const responseFacebook = async (response) => {
     console.log(response);
     if (response.accessToken) {
@@ -12,6 +12,7 @@ function FacebookAuthen() {
       });
       
       sessionStorage.setItem('access_token', result.data.access_token);
+      setToken(result.data.access_token);
     }
   };
 
