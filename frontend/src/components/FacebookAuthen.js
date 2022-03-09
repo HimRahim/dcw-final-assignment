@@ -8,19 +8,20 @@ function FacebookAuthen({ setToken }) {
     if (response.accessToken) {
       console.log(`log in with access_token = ${response.accessToken}`);
       let result = await axios.post('http://localhost:8080/api/login', {
+        type: 'facebook',
         token: response.accessToken,
       });
-      
+
       sessionStorage.setItem('access_token', result.data.access_token);
       setToken(result.data.access_token);
     }
   };
 
   return (
-    <div>
+    <div className='mx-5'>
       <FacebookLogin
         appId="3215602562097559"
-        autoLoad={true}
+        autoLoad={false}
         fields="name,email,picture"
         callback={responseFacebook}
       />
