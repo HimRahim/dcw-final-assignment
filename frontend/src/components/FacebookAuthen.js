@@ -12,13 +12,13 @@ function FacebookAuthen({ setToken }) {
         token: response.accessToken,
       });
 
-      sessionStorage.setItem('access_token', result.data.access_token);
+      localStorage.setItem('access_token', result.data.access_token);
       setToken(result.data.access_token);
     }
   };
 
   return (
-    <div className='mx-5'>
+    <div className="mx-5">
       <FacebookLogin
         appId="3215602562097559"
         autoLoad={false}
