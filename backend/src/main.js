@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
 app.post('/api/login', async (req, res) => {
   let token = req.body.token;
   let result;
+  let dbObject;
   switch (req.body.type) {
     case 'facebook':
       result = await axios.get('https://graph.facebook.com/me', {
@@ -30,12 +31,11 @@ app.post('/api/login', async (req, res) => {
         },
       });
       console.log(result.data.picture);
-      let dbObject = {
+      dbObject = {
         name: result.data.name,
         email: result.data.email,
         picture: result.data.picture.data.url,
       };
-      if (isOnDatabase(result.data.email)) updateDatabase(dbObject);
       break;
     case 'google':
       result = await axios.get('https://oauth2.googleapis.com/tokeninfo', {
@@ -43,8 +43,15 @@ app.post('/api/login', async (req, res) => {
           id_token: token,
         },
       });
+      dbObject = {
+        name: result.data.name,
+        email: result.data.email,
+        picture: result.data.picture
+      }
       break;
   }
+  if (!isOnDatabase(dbObject.email)) updateDatabase(dbObject);
+  console.log(result.data)
   if (!result.data) {
     res.sendStatus(403);
     return;
@@ -73,18 +80,19 @@ const updateDatabase = (dbObject) => {
   });
 };
 
-const isOnDatabase = (email) => {
+const isOnDatabase = async(email) => {
   let found = false;
   MongoClient.connect(uri, function (err, db) {
     if (err) throw err;
-    var dbo = db.db('mydb');
-    var query = { address: 'Park Lane 38' };
+    var dbo = db.db('userDB');
+    var query = { email };
     dbo
-      .collection('customers')
+      .collection('user')
       .find(query)
       .toArray(function (er, result) {
         if (er) throw er;
-        console.log(result);
+        if (result.length != 0)
+          found = true;
         db.close();
       });
   });
