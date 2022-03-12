@@ -80,7 +80,7 @@ const updateDatabase = (dbObject) => {
   });
 };
 
-const isOnDatabase = async(email) => {
+const isOnDatabase = async (email) => {
   let found = false;
   MongoClient.connect(uri, function (err, db) {
     if (err) throw err;

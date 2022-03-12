@@ -12,7 +12,7 @@ function GoogleAuthen({ setToken}) {
         token: response.tokenId,
       });
       
-      sessionStorage.setItem('access_token', result.data.access_token);
+     localStorage.setItem('access_token', result.data.access_token);
       setToken(result.data.access_token);
     }
   };
