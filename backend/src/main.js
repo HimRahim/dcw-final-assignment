@@ -18,6 +18,18 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+const authenticated = (req, res, next) => {
+  const auth_header = req.headers['authorization']
+  const token = auth_header && auth_header.split(' ')[1]
+  if (!token)
+    return res.sendStatus(401);
+  jwt.verify(token, TOKEN_SECRET, (err, info) => {
+    if (err) return res.sendStatus(403);
+    req.username = info.username
+    next();
+  })
+}
+
 app.post('/api/login', async (req, res) => {
   let token = req.body.token;
   let result;
@@ -63,6 +75,10 @@ app.post('/api/login', async (req, res) => {
   res.send({ access_token, username: data.username });
 });
 
+app.get('/api/info', authenticated, (req, res) => {
+  res.send({ 'ok': 1, username: req.username });
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
@@ -80,9 +96,9 @@ const updateDatabase = (dbObject) => {
   });
 };
 
-const isOnDatabase = async (email) => {
-  let found = false;
-  MongoClient.connect(uri, function (err, db) {
+const isOnDatabase =(email) => {
+  var found = false;
+  MongoClient.connect(uri,function (err, db) {
     if (err) throw err;
     var dbo = db.db('userDB');
     var query = { email };
