@@ -5,11 +5,14 @@ const cors = require('cors');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const port = 8080;
-const { MongoClient } = require('mongodb');
+// const { MongoClient } = require('mongodb');
 const uri =
   'mongodb+srv://him_rahim:LleGuKDmSVRWusP3@cluster0.cgxqn.mongodb.net/userDB?retryWrites=true&w=majority';
 const TOKEN_SECRET =
   'd9b8c6904f8624938db4c426dbacd280d7f2c190984dc31bb2adce2a8b801aa76f7513ed26170b2aba3100bf13e59967aeef883f301151102331203f4bbdaffc';
+const mongoose = require('mongoose');
+const User = require('./user');
+mongoose.connect(uri)
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -29,6 +32,8 @@ const authenticated = (req, res, next) => {
     next();
   })
 }
+
+
 
 app.post('/api/login', async (req, res) => {
   let token = req.body.token;
