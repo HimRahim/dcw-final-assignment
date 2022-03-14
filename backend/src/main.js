@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/test', (req, res) => {
-  res.send('hello')
+  res.send({message: 'hello'})
 })
 
 const authenticated = (req, res, next) => {
