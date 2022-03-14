@@ -5,14 +5,13 @@ const cors = require('cors');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const port = 8080;
-// const { MongoClient } = require('mongodb');
 const uri =
   'mongodb+srv://him_rahim:LleGuKDmSVRWusP3@cluster0.cgxqn.mongodb.net/userDB?retryWrites=true&w=majority';
 const TOKEN_SECRET =
   'd9b8c6904f8624938db4c426dbacd280d7f2c190984dc31bb2adce2a8b801aa76f7513ed26170b2aba3100bf13e59967aeef883f301151102331203f4bbdaffc';
 const mongoose = require('mongoose');
 const User = require('./user');
-mongoose.connect(uri)
+mongoose.connect(uri);
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -22,18 +21,15 @@ app.get('/', (req, res) => {
 });
 
 const authenticated = (req, res, next) => {
-  const auth_header = req.headers['authorization']
-  const token = auth_header && auth_header.split(' ')[1]
-  if (!token)
-    return res.sendStatus(401);
+  const auth_header = req.headers['authorization'];
+  const token = auth_header && auth_header.split(' ')[1];
+  if (!token) return res.sendStatus(401);
   jwt.verify(token, TOKEN_SECRET, (err, info) => {
     if (err) return res.sendStatus(403);
-    req.username = info.username
+    req.username = info.username;
     next();
-  })
-}
-
-
+  });
+};
 
 app.post('/api/login', async (req, res) => {
   let token = req.body.token;
@@ -63,12 +59,19 @@ app.post('/api/login', async (req, res) => {
       dbObject = {
         name: result.data.name,
         email: result.data.email,
-        picture: result.data.picture
-      }
+        picture: result.data.picture,
+      };
       break;
   }
-  if (!isOnDatabase(dbObject.email)) updateDatabase(dbObject);
-  console.log(result.data)
+  const user = new User({
+    _id: new mongoose.Types.ObjectId(),
+    ...dbObject,
+  });
+  User.find({ name: result.data.name })
+    .exec()
+    .then((doc) => {
+      if (doc.length == 0) user.save();
+    });
   if (!result.data) {
     res.sendStatus(403);
     return;
@@ -81,41 +84,18 @@ app.post('/api/login', async (req, res) => {
 });
 
 app.get('/api/info', authenticated, (req, res) => {
-  res.send({ 'ok': 1, username: req.username });
-})
+  User.find({ email: req.username })
+    .exec()
+    .then((doc) => {
+      res.send({
+        'ok': 1,
+        name: doc[0].name,
+        email: doc[0].email,
+        picture: doc[0].picture
+      })
+    });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
-
-const updateDatabase = (dbObject) => {
-  MongoClient.connect(uri, function (err, db) {
-    if (err) throw err;
-    var dbo = db.db('userDB');
-    var myobj = dbObject;
-    dbo.collection('user').insertOne(myobj, function (er, res) {
-      if (er) throw er;
-      console.log('1 document inserted');
-      db.close();
-    });
-  });
-};
-
-const isOnDatabase =(email) => {
-  var found = false;
-  MongoClient.connect(uri,function (err, db) {
-    if (err) throw err;
-    var dbo = db.db('userDB');
-    var query = { email };
-    dbo
-      .collection('user')
-      .find(query)
-      .toArray(function (er, result) {
-        if (er) throw er;
-        if (result.length != 0)
-          found = true;
-        db.close();
-      });
-  });
-  return found;
-};

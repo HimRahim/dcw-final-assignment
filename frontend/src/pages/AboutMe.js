@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import NavBar from '../components/NavBar';
 
 function AboutMe() {
   axios.interceptors.request.use(
@@ -13,18 +13,34 @@ function AboutMe() {
       return Promise.reject(err);
     }
   );
-
-  useEffect(async () => {
-    let result = await axios.get('http://localhost:8080/api/info');
-    console.log(result.data);
+  const [info, setInfo] = useState({
+    name: '',
+    email: '',
+    picture: '',
+  });
+  useEffect(() => {
+    const fecthData = async () => {
+      let result = await axios.get('http://localhost:8080/api/info');
+      console.log(result.data);
+      setInfo({
+        name: result.data.name,
+        email: result.data.email,
+        picture: result.data.picture,
+      });
+    };
+    fecthData();
   }, []);
-  
 
   return (
-    <div>
-      <img src="" alt="" />
-    </div>
-  )
+    <>
+      <NavBar/>
+      <div className="flex justify-center items-center flex-col">
+        <img src={info.picture} alt="" className="my-5" />
+        <h1 className="my-5">{info.name}</h1>
+        <h1 className="my-5">{info.email}</h1>
+      </div>
+    </>
+  );
 }
 
-export default AboutMe
+export default AboutMe;
