@@ -4,7 +4,7 @@ const app = express();
 const cors = require('cors');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
-const port = 8080;
+const port = 8000;
 const uri =
   'mongodb+srv://him_rahim:LleGuKDmSVRWusP3@cluster0.cgxqn.mongodb.net/userDB?retryWrites=true&w=majority';
 const TOKEN_SECRET =
