@@ -7,7 +7,7 @@ function GoogleAuthen({ setToken }) {
     console.log(response);
     if (response.accessToken) {
       console.log(`log in with access_token = ${response.accessToken}`);
-      let result = await axios.post('http://localhost:8080/api/login', {
+      let result = await axios.post('http://52.23.209.235/api/login', {
         type: 'google',
         token: response.tokenId,
       });

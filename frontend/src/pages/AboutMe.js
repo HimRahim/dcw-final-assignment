@@ -20,7 +20,7 @@ function AboutMe() {
   });
   useEffect(() => {
     const fecthData = async () => {
-      let result = await axios.get('http://localhost:8080/api/info');
+      let result = await axios.get('http://52.23.209.235/api/info');
       console.log(result.data);
       setInfo({
         name: result.data.name,
