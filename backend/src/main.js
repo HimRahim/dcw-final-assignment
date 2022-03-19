@@ -20,11 +20,6 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.post('/test', (req, res) => {
-  console.log('test')
-  res.send({message: 'hello'})
-})
-
 const authenticated = (req, res, next) => {
   const auth_header = req.headers['authorization'];
   const token = auth_header && auth_header.split(' ')[1];
