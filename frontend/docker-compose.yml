@@ -1,9 +1,9 @@
-version: '3.7'
+version: '3'
 services:
-  sample-prod:
-    container_name: sample-prod
-    build:
-      context: .
-      dockerfile: Dockerfile
+  web:
+    container_name: web
+    build: .
     ports:
-      - '3000:3000'
+      - 80:3000
+networks:
+  - dcw
