@@ -1,11 +1,9 @@
-version: '3'
+version: '3.7'
 services:
-  web:
-    container_name: web
+  sample-prod:
+    container_name: sample-prod
     build:
       context: .
-      dockerfile: Dockerfile
-    expose:
-      - 3000
+      dockerfile: Dockerfile.prod
     ports:
-      - 3000:3000
+      - '3000:3000'
