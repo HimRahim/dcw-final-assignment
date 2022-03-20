@@ -2,11 +2,10 @@ version: '3'
 services:
   web:
     container_name: web
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 3000
     ports:
       - 3000:3000
-    networks:
-      - dcw
-
-networks:
-  dcw:
