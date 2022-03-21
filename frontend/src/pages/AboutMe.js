@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import NavBar from '../components/NavBar';
+import config from '../config';
 
 function AboutMe() {
   axios.interceptors.request.use(
@@ -33,7 +34,7 @@ function AboutMe() {
 
   return (
     <>
-      <NavBar/>
+      <NavBar />
       <div className="flex justify-center items-center flex-col">
         <img src={info.picture} alt="" className="my-5" />
         <h1 className="my-5">{info.name}</h1>

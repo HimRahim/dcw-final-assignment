@@ -2,13 +2,14 @@ import axios from 'axios';
 import React, { useEffect, useState, Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import config from '../config'
 
 function NavBar() {
   axios.interceptors.request.use(
-    function (config) {
+    function (packet) {
       const token = localStorage.getItem('access_token');
       if (token) config.headers['Authorization'] = `Bearer ${token}`;
-      return config;
+      return packet;
     },
     function (err) {
       return Promise.reject(err);
