@@ -19,7 +19,7 @@ function NavBar() {
   useEffect(() => {
     const fecthData = async () => {
       let result = await axios.get(
-        'https://dcwfinalassignmentserver.tk/api/info'
+        `${config.apiUrlPrefix}/info`
       );
       console.log(result.data);
       setInfo({

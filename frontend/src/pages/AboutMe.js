@@ -20,7 +20,7 @@ function AboutMe() {
   });
   useEffect(() => {
     const fecthData = async () => {
-      let result = await axios.get('https://dcwfinalassignmentserver.tk/api/info');
+      let result = await axios.get(`${config.apiUrlPrefix}/info`);
       console.log(result.data);
       setInfo({
         name: result.data.name,

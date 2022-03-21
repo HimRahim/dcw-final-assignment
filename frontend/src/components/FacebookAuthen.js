@@ -1,13 +1,14 @@
 import React from 'react';
 import FacebookLogin from 'react-facebook-login';
 import axios from 'axios';
+import config from '../config'
 
 function FacebookAuthen({ setToken }) {
   const responseFacebook = async (response) => {
     console.log(response);
     if (response.accessToken) {
       console.log(`log in with access_token = ${response.accessToken}`);
-      let result = await axios.post('https://dcwfinalassignmentserver.tk/api/login', {
+      let result = await axios.post(`${config.apiUrlPrefix}/login`, {
         type: 'facebook',
         token: response.accessToken,
       });
