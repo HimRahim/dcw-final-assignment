@@ -16,7 +16,7 @@ mongoose.connect(uri);
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/test', (req, res) => {
+app.get('/api/', (req, res) => {
   res.send('Hello World!');
 });
 
