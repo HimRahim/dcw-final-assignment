@@ -8,7 +8,7 @@ function NavBar() {
   axios.interceptors.request.use(
     function (packet) {
       const token = localStorage.getItem('access_token');
-      if (token) config.headers['Authorization'] = `Bearer ${token}`;
+      if (token) packet.headers['Authorization'] = `Bearer ${token}`;
       return packet;
     },
     function (err) {
