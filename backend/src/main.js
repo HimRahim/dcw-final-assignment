@@ -11,6 +11,7 @@ const TOKEN_SECRET =
   'd9b8c6904f8624938db4c426dbacd280d7f2c190984dc31bb2adce2a8b801aa76f7513ed26170b2aba3100bf13e59967aeef883f301151102331203f4bbdaffc';
 const mongoose = require('mongoose');
 const User = require('./user');
+const Post = require('./post');
 mongoose.connect(uri);
 
 app.use(bodyParser.json());
@@ -77,7 +78,8 @@ app.post('/api/login', async (req, res) => {
     return;
   }
   let data = {
-    username: result.data.email,
+    username: result.data.name,
+    email: result.data.email
   };
   let access_token = jwt.sign(data, TOKEN_SECRET, { expiresIn: '1800s' });
   res.send({ access_token, username: data.username });
@@ -95,6 +97,18 @@ app.get('/api/info', authenticated, (req, res) => {
       })
     });
 });
+
+app.post('/api/post', authenticated, (req, res) => {
+  const post = new Post({
+    _id: mongoose.Types.ObjectId(),
+    postBy: req.body.postBy,
+    email: req.body.email,
+    content: req.body.content
+  })
+  post.save().then(result => console.log(result))
+  console.log(req.body.content);
+  res.send(req.body.content)
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

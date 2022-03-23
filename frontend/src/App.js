@@ -9,9 +9,9 @@ import Post from './pages/Post';
 function App() {
   const [token, setToken] = useState(localStorage.getItem('access_token'));
 
-  // if (!token || jwtDecode(token).exp < Date.now() / 1000) {
-  //   return <Login setToken={setToken} />;
-  // }
+  if (!token || jwtDecode(token).exp < Date.now() / 1000) {
+    return <Login setToken={setToken} />;
+  }
 
   return (
     <div className="App">
