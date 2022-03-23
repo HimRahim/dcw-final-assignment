@@ -41,6 +41,7 @@ function TextEditor() {
             image: {
               uploadCallback: uploadImageCallBack,
               alt: { present: false, mandatory: false },
+              previewImage: true
             },
           }}
         />
