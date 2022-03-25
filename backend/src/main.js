@@ -79,36 +79,44 @@ app.post('/api/login', async (req, res) => {
   }
   let data = {
     username: result.data.name,
-    email: result.data.email
+    email: result.data.email,
   };
   let access_token = jwt.sign(data, TOKEN_SECRET, { expiresIn: '1800s' });
   res.send({ access_token, username: data.username });
 });
 
 app.get('/api/info', authenticated, (req, res) => {
-  User.find({ email: req.username })
+  User.find({ name: req.username })
     .exec()
     .then((doc) => {
       res.send({
-        'ok': 1,
+        ok: 1,
         name: doc[0].name,
         email: doc[0].email,
-        picture: doc[0].picture
-      })
+        picture: doc[0].picture,
+      });
     });
 });
 
 app.post('/api/post', authenticated, (req, res) => {
   const post = new Post({
     _id: mongoose.Types.ObjectId(),
-    postBy: req.body.postBy,
+    postBy: req.body.posyBy,
     email: req.body.email,
+    header: req.body.header,
     content: req.body.content
-  })
-  post.save().then(result => console.log(result))
-  console.log(req.body.content);
-  res.send(req.body.content)
-})
+  });
+  post.save().then((result) => res.send(result));
+});
+
+app.get('/api/getPost', (req, res) => {
+  Post.find({})
+    .exec()
+    .then((doc) => {
+      console.log(doc);
+      res.send(doc);
+    });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

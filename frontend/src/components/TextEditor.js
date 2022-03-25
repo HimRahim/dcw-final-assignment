@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
+import { convertToRaw, EditorState } from 'draft-js';
 import React, { useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -23,6 +23,10 @@ function TextEditor() {
     EditorState.createEmpty()
   );
 
+  const [markup, setMarkup] = useState('');
+
+  const [header, setHeader] = useState('');
+
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
   };
@@ -30,51 +34,92 @@ function TextEditor() {
   const handlePostSubmit = () => {
     callPostApi();
     setEditorState(() => EditorState.createEmpty());
+    setHeader('');
   };
 
   const callPostApi = async () => {
+    let content = convertToRaw(editorState.getCurrentContent());
+    setMarkup(
+      draftToHtml(
+        content,
+        {
+          trigger: '#',
+          separator: ' ',
+        },
+        true,
+        true
+      )
+    );
+    if (content.blocks[0].text.length === 0) {
+      console.log("cant't post");
+      return;
+    }
+
     let token = localStorage.getItem('access_token');
-    let decodeToken = jwtDecode(token)
+    let decodeToken = jwtDecode(token);
     let userInfo = {
       name: decodeToken.username,
-      email: decodeToken.email
-    }
+      email: decodeToken.email,
+    };
+
     let result = await axios.post(`${config.apiUrlPrefix}/post`, {
       postBy: userInfo.name,
       email: userInfo.email,
-      content: convertToRaw(editorState.getCurrentContent()),
+      header,
+      content,
     });
-    setRawContentState(result.data)
   };
-
-  const [rawContentState, setRawContentState] = useState({});
-
-  const markup = draftToHtml(
-    rawContentState,
-    {
-      trigger: '#',
-      separator: ' ',
-    },
-    true,
-    true
-  );
 
   const uploadImageCallBack = (file) => {
-    const imageObject = {
-      file: file,
-      localSrc: URL.createObjectURL(file),
-    };
-    console.log(imageObject);
-    return new Promise((resolve, reject) => {
-      resolve({ data: { link: imageObject.localSrc } });
-    });
+    //
+    return new Promise(
+      (resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '	https://api.imgur.com/3/upload');
+        xhr.setRequestHeader('Authorization', 'Client-ID b8affd4811a4f79');
+        const data = new FormData();
+        data.append('image', file);
+        xhr.send(data);
+        xhr.addEventListener('load', () => {
+          const response = JSON.parse(xhr.responseText);
+          console.log(response)
+          resolve(response);
+        });
+        xhr.addEventListener('error', () => {
+          const error = JSON.parse(xhr.responseText);
+          console.log(error)
+          reject(error);
+        });
+      }
+    );
+    // console.log(file);
+    // return new Promise((resolve, reject) => {
+    //   if (file) {
+    //     axios.post('http://localhost:8001/api/upload', {file}).then(res => console.log(res))
+    //   }
+    // });
   };
-  console.log(markup);
+  console.log(header);
   const createMarkup = () => {
     return { __html: `${markup}` };
   };
   return (
-    <div className="w-9/12 mx-auto shadow-md p-5">
+    <div className="w-9/12 mx-auto shadow-lg p-5 my-20">
+      <div className="mb-6">
+        <label
+          htmlFor="base-input"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+        >
+          Header
+        </label>
+        <input
+          type="text"
+          id="base-input"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          onChange={(e) => setHeader(e.target.value)}
+          value={header}
+        />
+      </div>
       <div>
         <Editor
           editorState={editorState}
