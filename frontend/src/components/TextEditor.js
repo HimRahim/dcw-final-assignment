@@ -72,31 +72,52 @@ function TextEditor() {
 
   const uploadImageCallBack = (file) => {
     //
-    return new Promise(
-      (resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '	https://api.imgur.com/3/upload');
-        xhr.setRequestHeader('Authorization', 'Client-ID b8affd4811a4f79');
-        const data = new FormData();
-        data.append('image', file);
-        xhr.send(data);
-        xhr.addEventListener('load', () => {
-          const response = JSON.parse(xhr.responseText);
-          console.log(response)
-          resolve(response);
-        });
-        xhr.addEventListener('error', () => {
-          const error = JSON.parse(xhr.responseText);
-          console.log(error)
-          reject(error);
-        });
-      }
-    );
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://api.imageshack.com/v2/images');
+      // xhr.setRequestHeader('Authorization', 'Client-ID b8affd4811a4f79');
+      const data = new FormData();
+      data.append('key', 'KRQZ04X6eb8c3526cfdb6d40114684bc99f90ba3')
+      data.append('fileupload', file);
+      xhr.send(data);
+      xhr.addEventListener('load', () => {
+        const response = JSON.parse(xhr.responseText);
+        console.log(response);
+        resolve(response);
+      });
+      xhr.addEventListener('error', () => {
+        const error = JSON.parse(xhr.responseText);
+        console.log(error);
+        reject(error);
+      });
+    });
     // console.log(file);
     // return new Promise((resolve, reject) => {
     //   if (file) {
-    //     axios.post('http://localhost:8001/api/upload', {file}).then(res => console.log(res))
+    //     axios({
+    //       method: 'POST',
+    //       url: 'https://api.imageshack.com/v2/images',
+    //       data: {
+    //         'key': 'KRQZ04X6eb8c3526cfdb6d40114684bc99f90ba3',
+    //         'fileupload': file
+    //       },
+    //       headers: {
+    //         'Content-Type': 'multipart/form-data'
+    //       }
+    //     }).then(res => console.log(res))
     //   }
+    // });
+    // return new Promise((resolve, reject) => {
+    //   const imageObject = {
+    //     file: file,
+    //     localSrc: URL.createObjectURL(file),
+    //   }
+    //   const data = new FormData();
+    //   data.append('fileupload', file);
+    //   console.log(data);
+    //   axios.post('http://localhost:8001/api/upload', imageObject).then((responseImage) => {
+    //     resolve({ data: { link: responseImage.data.link } });
+    //   });
     // });
   };
   console.log(header);
