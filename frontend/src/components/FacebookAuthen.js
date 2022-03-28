@@ -21,7 +21,7 @@ function FacebookAuthen({ setToken }) {
   return (
     <div className="mx-5">
       <FacebookLogin
-        appId="3215602562097559"
+        appId="656705078992423"
         autoLoad={false}
         fields="name,email,picture"
         callback={responseFacebook}

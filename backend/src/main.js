@@ -21,6 +21,8 @@ app.get('/api/', (req, res) => {
   res.send('Hello World!');
 });
 
+const logger = require('../logger/logger');
+
 const authenticated = (req, res, next) => {
   const auth_header = req.headers['authorization'];
   const token = auth_header && auth_header.split(' ')[1];
@@ -74,6 +76,7 @@ app.post('/api/login', async (req, res) => {
       if (doc.length == 0) user.save();
     });
   if (!result.data) {
+    logger.loga.log('error',result.data.name + ' Login fail');
     res.sendStatus(403);
     return;
   }
@@ -82,6 +85,7 @@ app.post('/api/login', async (req, res) => {
     email: result.data.email,
   };
   let access_token = jwt.sign(data, TOKEN_SECRET, { expiresIn: '1800s' });
+  logger.loga.log('info',result.data.name + ' ' + 'Login Successful');
   res.send({ access_token, username: data.username });
 });
 
