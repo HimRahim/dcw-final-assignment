@@ -15,12 +15,13 @@ function App() {
   }
 
   return (
-    <div className="App bg-gray-100 h-screen">
+    <div className="App bg-gray-100 h-full">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/detail" element={<Detail />}></Route>
           <Route path="/post" element={<PostPage />}></Route>
+          <Route path="aboutme" element={<AboutMe />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

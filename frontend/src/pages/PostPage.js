@@ -4,7 +4,7 @@ import TextEditor from '../components/TextEditor'
 
 function PostPage() {
   return (
-    <div>
+    <div className='h-screen'>
       <NavBar/>
       <TextEditor/>
     </div>

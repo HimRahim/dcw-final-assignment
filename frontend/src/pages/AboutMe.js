@@ -33,14 +33,14 @@ function AboutMe() {
   }, []);
 
   return (
-    <>
+    <div className='h-screen'>
       <NavBar />
       <div className="flex justify-center items-center flex-col">
         <img src={info.picture} alt="" className="my-5" />
         <h1 className="my-5">{info.name}</h1>
         <h1 className="my-5">{info.email}</h1>
       </div>
-    </>
+    </div>
   );
 }
 

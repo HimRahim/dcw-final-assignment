@@ -54,20 +54,16 @@ function TextEditor() {
       console.log("cant't post");
       return;
     }
+    let result = await axios.get(`${config.apiUrlPrefix}/info`)
 
-    let token = localStorage.getItem('access_token');
-    let decodeToken = jwtDecode(token);
-    let userInfo = {
-      name: decodeToken.username,
-      email: decodeToken.email,
-    };
-
-    let result = await axios.post(`${config.apiUrlPrefix}/post`, {
-      postBy: userInfo.name,
-      email: userInfo.email,
+    let result1 = await axios.post(`${config.apiUrlPrefix}/post`, {
+      postBy: result.data.name,
+      email: result.data.email,
+      picture: result.data.picture,
       header,
       content,
     });
+    console.log(result1.data)
   };
 
   const uploadImageCallBack = (file) => {
@@ -83,7 +79,7 @@ function TextEditor() {
       xhr.addEventListener('load', () => {
         const response = JSON.parse(xhr.responseText);
         console.log(response);
-        resolve(response);
+        resolve({ data: { link: response.result.images[0].direct_link } });
       });
       xhr.addEventListener('error', () => {
         const error = JSON.parse(xhr.responseText);

@@ -101,8 +101,9 @@ app.get('/api/info', authenticated, (req, res) => {
 app.post('/api/post', authenticated, (req, res) => {
   const post = new Post({
     _id: mongoose.Types.ObjectId(),
-    postBy: req.body.posyBy,
+    postBy: req.username,
     email: req.body.email,
+    picture: req.body.picture,
     header: req.body.header,
     content: req.body.content
   });
@@ -113,7 +114,6 @@ app.get('/api/getPost', (req, res) => {
   Post.find({})
     .exec()
     .then((doc) => {
-      console.log(doc);
       res.send(doc);
     });
 });

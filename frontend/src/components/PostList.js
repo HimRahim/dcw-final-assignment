@@ -6,10 +6,8 @@ import draftToHtml from 'draftjs-to-html';
 import Card from '@material-tailwind/react/Card';
 import CardBody from '@material-tailwind/react/CardBody';
 import CardFooter from '@material-tailwind/react/CardFooter';
-import H6 from '@material-tailwind/react/Heading6';
 import Paragraph from '@material-tailwind/react/Paragraph';
 import Button from '@material-tailwind/react/Button';
-import { Link } from 'react-router-dom';
 
 function Post() {
   const [postList, setPostList] = useState([]);
@@ -21,32 +19,18 @@ function Post() {
     };
     fetchData();
   }, []);
-  console.log();
+  console.log(postList);
   return postList.map((list) => {
     return (
-      //   <div
-      //     key={list._id}
-      //     className="flex justify-center"
-      //     dangerouslySetInnerHTML={{
-      //       __html: draftToHtml(
-      //         list.content,
-      //         {
-      //           trigger: '#',
-      //           separator: ' ',
-      //         },
-      //         true,
-      //         true
-      //       ),
-      //     }}
-      //   ></div>
-      <div key={list.header}>
-        <a
-          href={'/detail?header=' + `${list.header}`}
-          className="flex justify-center items-center hover:cursor-pointer hover:scale-105 shadow-sm transition ease-in-out w-9/12 mx-auto my-10 rounded-lg w-50"
+      <div key={list.header} className='w-9/12 flex justify-center items-center mx-auto'>
+        <div
+          className="shadow-sm  w-9/12 my-5 rounded-lg w-50"
         >
           <Card>
             <CardBody>
-              <H6 color="gray">{list.header}</H6>
+              <img className="w-10 h-10 rounded-full inline" src={list.picture} alt="avatar" />
+              <h1 className='inline text-2xl relative left-3 top-1'>{ list.postBy }</h1>
+              <h2 className='text-3xl'>{list.header}</h2>
               <Paragraph color="gray">
                 <div
                   dangerouslySetInnerHTML={{
@@ -70,7 +54,7 @@ function Post() {
               </Button>
             </CardFooter>
           </Card>
-        </a>
+        </div>
       </div>
     );
   });
