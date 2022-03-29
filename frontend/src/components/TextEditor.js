@@ -4,9 +4,6 @@ import React, { useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import config from '../config';
-import draftToHtml from 'draftjs-to-html';
-import jwtDecode from 'jwt-decode';
-
 function TextEditor() {
   axios.interceptors.request.use(
     function (packet) {
@@ -22,13 +19,11 @@ function TextEditor() {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-
-  const [markup, setMarkup] = useState('');
-
   const [header, setHeader] = useState('');
 
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
+  const onEditorStateChange = (state) => {
+    console.log(state)
+    setEditorState(state);
   };
 
   const handlePostSubmit = () => {
@@ -39,22 +34,10 @@ function TextEditor() {
 
   const callPostApi = async () => {
     let content = convertToRaw(editorState.getCurrentContent());
-    setMarkup(
-      draftToHtml(
-        content,
-        {
-          trigger: '#',
-          separator: ' ',
-        },
-        true,
-        true
-      )
-    );
     if (content.blocks[0].text.length === 0) {
-      console.log("cant't post");
       return;
     }
-    let result = await axios.get(`${config.apiUrlPrefix}/info`)
+    let result = await axios.get(`${config.apiUrlPrefix}/info`);
 
     let result1 = await axios.post(`${config.apiUrlPrefix}/post`, {
       postBy: result.data.name,
@@ -63,7 +46,7 @@ function TextEditor() {
       header,
       content,
     });
-    console.log(result1.data)
+    console.log(result1.data);
   };
 
   const uploadImageCallBack = (file) => {
@@ -73,7 +56,7 @@ function TextEditor() {
       xhr.open('POST', 'https://api.imageshack.com/v2/images');
       // xhr.setRequestHeader('Authorization', 'Client-ID b8affd4811a4f79');
       const data = new FormData();
-      data.append('key', 'KRQZ04X6eb8c3526cfdb6d40114684bc99f90ba3')
+      data.append('key', 'KRQZ04X6eb8c3526cfdb6d40114684bc99f90ba3');
       data.append('fileupload', file);
       xhr.send(data);
       xhr.addEventListener('load', () => {
@@ -115,10 +98,6 @@ function TextEditor() {
     //     resolve({ data: { link: responseImage.data.link } });
     //   });
     // });
-  };
-  console.log(header);
-  const createMarkup = () => {
-    return { __html: `${markup}` };
   };
   return (
     <div className="w-9/12 mx-auto shadow-lg p-5 my-20">
@@ -166,7 +145,6 @@ function TextEditor() {
           Post
         </button>
       </div>
-      <div dangerouslySetInnerHTML={createMarkup()}></div>
     </div>
   );
 }

@@ -76,7 +76,7 @@ app.post('/api/login', async (req, res) => {
       if (doc.length == 0) user.save();
     });
   if (!result.data) {
-    logger.loga.log('error',result.data.name + ' Login fail');
+    logger.loga.log('error', result.data.name + ' Login fail');
     res.sendStatus(403);
     return;
   }
@@ -85,7 +85,7 @@ app.post('/api/login', async (req, res) => {
     email: result.data.email,
   };
   let access_token = jwt.sign(data, TOKEN_SECRET, { expiresIn: '1800s' });
-  logger.loga.log('info',result.data.name + ' ' + 'Login Successful');
+  logger.loga.log('info', result.data.name + ' ' + 'Login Successful');
   res.send({ access_token, username: data.username });
 });
 
@@ -109,13 +109,21 @@ app.post('/api/post', authenticated, (req, res) => {
     email: req.body.email,
     picture: req.body.picture,
     header: req.body.header,
-    content: req.body.content
+    content: req.body.content,
   });
   post.save().then((result) => res.send(result));
 });
 
 app.get('/api/getPost', (req, res) => {
   Post.find({})
+    .exec()
+    .then((doc) => {
+      res.send(doc);
+    });
+});
+
+app.post('/api/getUserPost', (req, res) => {
+  Post.find({ name: req.body.user })
     .exec()
     .then((doc) => {
       res.send(doc);

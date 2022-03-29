@@ -5,9 +5,7 @@ import config from '../config';
 import draftToHtml from 'draftjs-to-html';
 import Card from '@material-tailwind/react/Card';
 import CardBody from '@material-tailwind/react/CardBody';
-import CardFooter from '@material-tailwind/react/CardFooter';
 import Paragraph from '@material-tailwind/react/Paragraph';
-import Button from '@material-tailwind/react/Button';
 
 function Post() {
   const [postList, setPostList] = useState([]);
@@ -19,7 +17,6 @@ function Post() {
     };
     fetchData();
   }, []);
-  console.log(postList);
   return postList.map((list) => {
     return (
       <div key={list.header} className='w-9/12 flex justify-center items-center mx-auto'>
@@ -47,12 +44,6 @@ function Post() {
                 ></div>
               </Paragraph>
             </CardBody>
-
-            <CardFooter>
-              <Button color="lightBlue" size="lg" ripple="light">
-                Read More
-              </Button>
-            </CardFooter>
           </Card>
         </div>
       </div>
