@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { convertToRaw, EditorState } from 'draft-js';
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import React, { useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -33,10 +33,7 @@ function TextEditor() {
   };
 
   const callPostApi = async () => {
-    let content = convertToRaw(editorState.getCurrentContent());
-    if (content.blocks[0].text.length === 0) {
-      return;
-    }
+    let content = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
     let result = await axios.get(`${config.apiUrlPrefix}/info`);
 
     let result1 = await axios.post(`${config.apiUrlPrefix}/post`, {
@@ -48,7 +45,6 @@ function TextEditor() {
     });
     console.log(result1.data);
   };
-
   const uploadImageCallBack = (file) => {
     //
     return new Promise((resolve, reject) => {

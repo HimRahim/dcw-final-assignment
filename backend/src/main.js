@@ -130,6 +130,27 @@ app.post('/api/getUserPost', (req, res) => {
     });
 });
 
+app.put('/api/updatePost', (req, res) => {
+  let filter = {
+    postBy: req.body.postBy,
+    email: req.body.email,
+    oldHeader: req.body.oldHeader,
+    oldContent: req.body.oldContent
+  }
+  let update = {
+    header: req.body.newHeader,
+    content: req.body.newContent
+  }
+  console.log(filter, update)
+  Post.updateOne(
+    filter,
+    update
+  ).then((doc) => {
+    console.log(doc)
+    if (doc) res.send({ status: 'ok' });
+  });
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

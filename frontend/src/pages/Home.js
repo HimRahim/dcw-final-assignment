@@ -6,7 +6,7 @@ import PostList from '../components/PostList';
 function Home() {
   const [postButton, setPostButton] = useState(false);
   return (
-    <div>
+    <div className='h-screen'>
       <NavBar />
       <h1 className="text-center">Home</h1>
       <PostList />

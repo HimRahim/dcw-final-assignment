@@ -6,7 +6,7 @@ const postSchema = mongoose.Schema({
   email: String,
   picture: String,
   header: String,
-  content: Object,
+  content: String,
 });
 
 module.exports = mongoose.model('Post', postSchema);
