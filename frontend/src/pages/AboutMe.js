@@ -10,8 +10,6 @@ import Paragraph from '@material-tailwind/react/Paragraph';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {
-  ContentState,
-  convertFromHTML,
   convertFromRaw,
   convertToRaw,
   EditorState,
@@ -19,10 +17,10 @@ import {
 
 function AboutMe() {
   axios.interceptors.request.use(
-    function (config) {
+    function (packet) {
       const token = localStorage.getItem('access_token');
-      if (token) config.headers['Authorization'] = `Bearer ${token}`;
-      return config;
+      if (token) packet.headers['Authorization'] = `Bearer ${token}`;
+      return packet;
     },
     function (err) {
       return Promise.reject(err);
@@ -50,7 +48,7 @@ function AboutMe() {
       setPostList(result2.data);
     };
     fecthData();
-  }, [edit]);
+  });
 
   
   const [oldHeader, setOldHeader] = useState('');
@@ -78,8 +76,13 @@ function AboutMe() {
     setNewHeader('');
     setEdit(false)
   };
+  const handleDeleteSubmit = async (list) => {
+    
+    let result = await axios.delete(`${config.apiUrlPrefix}/deletePost`, {data: list});
+    console.log(result.data)
+  }
   return (
-    <div className="h-screen">
+    <div className="min-h-screen">
       <NavBar />
       <div className="flex justify-center items-center flex-col">
         <img src={info.picture} alt="" className="my-5" />
@@ -126,10 +129,16 @@ function AboutMe() {
           </div>
           <div className="flex justify-end">
             <button
-              className="bg-gray-200 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+              className="bg-blue-500 hover:bg-blue-700 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mx-2"
               onClick={handleEditSubmit}
             >
               Edit
+            </button>
+            <button
+              className="bg-red-500 hover:bg-red-700 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mx-2"
+              onClick={() => setEdit(false)}
+            >
+              Cancle
             </button>
           </div>
         </div>
@@ -187,7 +196,10 @@ function AboutMe() {
                     >
                       Edit
                     </button>
-                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-3">
+                    <button
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-3"
+                      onClick={() => handleDeleteSubmit(list)}
+                    >
                       Delete
                     </button>
                   </div>

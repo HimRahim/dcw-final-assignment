@@ -141,15 +141,21 @@ app.put('/api/updatePost', (req, res) => {
     header: req.body.newHeader,
     content: req.body.newContent
   }
-  console.log(filter, update)
   Post.updateOne(
     filter,
     update
   ).then((doc) => {
-    console.log(doc)
-    if (doc) res.send({ status: 'ok' });
+    if (doc.acknowledged) res.send({ status: 'ok' });
   });
 });
+
+app.delete('/api/deletePost', (req, res) => {
+  let filter = req.body;
+  Post.deleteOne(filter).then(doc => {
+    if (doc.acknowledged)
+      res.send({ status: 'ok'})
+  })
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
