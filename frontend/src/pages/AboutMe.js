@@ -32,6 +32,7 @@ function AboutMe() {
     picture: '',
   });
   const [edit, setEdit] = useState(false);
+  const [deletePost, setDeletePost] = useState(false);
   const [postList, setPostList] = useState([]);
   useEffect(() => {
     const fecthData = async () => {
@@ -48,7 +49,7 @@ function AboutMe() {
       setPostList(result2.data);
     };
     fecthData();
-  });
+  }, [edit, deletePost]);
 
   
   const [oldHeader, setOldHeader] = useState('');
@@ -77,9 +78,9 @@ function AboutMe() {
     setEdit(false)
   };
   const handleDeleteSubmit = async (list) => {
-    
-    let result = await axios.delete(`${config.apiUrlPrefix}/deletePost`, {data: list});
-    console.log(result.data)
+    setDeletePost(true)
+    await axios.delete(`${config.apiUrlPrefix}/deletePost`, { data: list });
+    setDeletePost(false)
   }
   return (
     <div className="min-h-screen">

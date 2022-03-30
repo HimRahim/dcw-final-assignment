@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
+import { convertToRaw, EditorState } from 'draft-js';
 import React, { useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -20,9 +20,8 @@ function TextEditor() {
     EditorState.createEmpty()
   );
   const [header, setHeader] = useState('');
-
   const onEditorStateChange = (state) => {
-    console.log(state)
+    console.log(state);
     setEditorState(state);
   };
 

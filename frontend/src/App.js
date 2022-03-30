@@ -21,7 +21,7 @@ function App() {
           <Route path="/" element={<Home />}></Route>
           <Route path="/detail" element={<Detail />}></Route>
           <Route path="/post" element={<PostPage />}></Route>
-          <Route path="aboutme" element={<AboutMe />}></Route>
+          <Route path="/mypost" element={<AboutMe />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

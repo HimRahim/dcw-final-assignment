@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import PostList from '../components/PostList';
 
 function Home() {
-  const [postButton, setPostButton] = useState(false);
   return (
-    <div className='h-screen'>
+    <div className=' min-h-screen'>
       <NavBar />
-      <h1 className="text-center">Home</h1>
       <PostList />
       <div className="w-20 fixed bottom-10 right-10 ">
         <Link to="/post">
