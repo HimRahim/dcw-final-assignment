@@ -123,7 +123,8 @@ app.get('/api/getPost', (req, res) => {
 });
 
 app.post('/api/getUserPost', (req, res) => {
-  Post.find({ name: req.body.user })
+  console.log(req.body.user);
+  Post.find({ postBy: req.body.user })
     .exec()
     .then((doc) => {
       res.send(doc);
@@ -135,27 +136,23 @@ app.put('/api/updatePost', (req, res) => {
     postBy: req.body.postBy,
     email: req.body.email,
     oldHeader: req.body.oldHeader,
-    oldContent: req.body.oldContent
-  }
+    oldContent: req.body.oldContent,
+  };
   let update = {
     header: req.body.newHeader,
-    content: req.body.newContent
-  }
-  Post.updateOne(
-    filter,
-    update
-  ).then((doc) => {
+    content: req.body.newContent,
+  };
+  Post.updateOne(filter, update).then((doc) => {
     if (doc.acknowledged) res.send({ status: 'ok' });
   });
 });
 
 app.delete('/api/deletePost', (req, res) => {
   let filter = req.body;
-  Post.deleteOne(filter).then(doc => {
-    if (doc.acknowledged)
-      res.send({ status: 'ok'})
-  })
-})
+  Post.deleteOne(filter).then((doc) => {
+    if (doc.acknowledged) res.send({ status: 'ok' });
+  });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
